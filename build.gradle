@@ -1,0 +1,31 @@
+allprojects {
+    group 'uk.co.tscala'
+    version '1.0-SNAPSHOT'
+
+    apply plugin: 'scala'
+
+    repositories {
+        maven {
+            url 'http://jcenter.bintray.com'
+        }
+        maven {
+            url 'https://dl.bintray.com/websudos/oss-releases/'
+        }
+    }
+
+    dependencies {
+        compile 'org.scala-lang:scala-compiler:2.11.7'
+        compile 'org.scala-lang:scala-library:2.11.7'
+    }
+}
+
+dependencies {
+    compile project(':game-theory-rest')
+    compile project(':game-theory-analysis')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task getDeps(type: Copy) {
+    from sourceSets.main.runtimeClasspath
+    into 'runtime/'
+}

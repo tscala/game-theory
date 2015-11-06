@@ -1,0 +1,7 @@
+dependencies {
+    compile project(':game-theory-domain')
+    compile 'com.typesafe.akka:akka-actor_2.11:2.4.0'
+    compile 'com.websudos:phantom-dsl_2.11:1.12.2'
+    compile 'com.websudos:diesel-engine_2.11:0.2.4'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

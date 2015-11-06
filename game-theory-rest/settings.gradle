@@ -1,0 +1,4 @@
+rootProject.name = 'game-theory-rest'
+
+include 'game-theory-domain'
+include 'game-theory-db'
