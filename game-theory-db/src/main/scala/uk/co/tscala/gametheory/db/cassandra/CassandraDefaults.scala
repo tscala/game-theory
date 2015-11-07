@@ -1,4 +1,4 @@
-package uk.co.tscala.gametheory.db.users.cassandra
+package uk.co.tscala.gametheory.db.cassandra
 
 import com.websudos.phantom.connectors.ContactPoint
 

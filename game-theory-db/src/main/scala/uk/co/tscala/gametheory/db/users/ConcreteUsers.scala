@@ -1,8 +1,7 @@
-package uk.co.tscala.gametheory.db.users.cassandra
+package uk.co.tscala.gametheory.db.users
 
 import com.datastax.driver.core.ResultSet
 import com.websudos.phantom.dsl._
-import uk.co.tscala.gametheory.db.users.Users
 import uk.co.tscala.gametheory.domain.User
 
 import scala.concurrent.Future
