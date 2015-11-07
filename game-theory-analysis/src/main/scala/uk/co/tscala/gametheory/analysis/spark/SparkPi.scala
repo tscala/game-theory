@@ -5,7 +5,7 @@ import org.apache.spark.{SparkContext, SparkConf}
 import scala.math.random
 
   /** Computes an approximation to pi */
-  object SparkPi {
+object SparkPi {
     def main(args: Array[String]) {
       val conf = new SparkConf().setMaster("local[4]").setAppName("Spark Pi")
       val spark = new SparkContext(conf)

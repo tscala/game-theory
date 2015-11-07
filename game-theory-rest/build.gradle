@@ -3,5 +3,5 @@ dependencies {
     compile 'io.spray:spray-can_2.11:1.3.3'
     compile 'io.spray:spray-client_2.11:1.3.3'
     compile 'io.spray:spray-json_2.11:1.3.2'
-    compile 'com.typesafe.akka:akka-actor_2.11:2.4.0'
+    compile 'com.typesafe.akka:akka-actor_2.11:2.3.14'
 }

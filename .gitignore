@@ -3,6 +3,8 @@
 .gradle
 build/
 */build/
+runtime
+*/runtime/
 
 # Ignore Gradle GUI config
 gradle-app.setting

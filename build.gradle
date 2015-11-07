@@ -2,7 +2,9 @@ allprojects {
     group 'uk.co.tscala'
     version '1.0-SNAPSHOT'
 
+    apply plugin: 'java'
     apply plugin: 'scala'
+    apply plugin: 'idea'
 
     repositories {
         maven {
