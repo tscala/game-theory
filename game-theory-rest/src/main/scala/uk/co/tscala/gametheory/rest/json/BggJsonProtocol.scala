@@ -4,5 +4,5 @@ import spray.json.DefaultJsonProtocol
 import uk.co.tscala.gametheory.domain.Game
 
 object BggJsonProtocol extends DefaultJsonProtocol {
-    implicit val gameFormat = jsonFormat2(Game)
+    implicit val gameFormat = jsonFormat4(Game)
 }

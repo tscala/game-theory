@@ -41,7 +41,6 @@ object BggRestClient extends App with CassandraDefaults.connector.Connector {
       Await.result(GameTheoryDatabase.autocreate.future(), 5.seconds)
       Await.ready(GameTheoryDatabase.games.create.ifNotExists().future(), 5.seconds)
 
-
       members.foreach { name =>
         // update db?
 
@@ -51,7 +50,6 @@ object BggRestClient extends App with CassandraDefaults.connector.Connector {
 
         getCollection(name) onComplete {
           case Success(json) =>
-
             import uk.co.tscala.gametheory.rest.json.BggJsonProtocol._
             val games = json.parseJson.convertTo[List[Game]]
 
