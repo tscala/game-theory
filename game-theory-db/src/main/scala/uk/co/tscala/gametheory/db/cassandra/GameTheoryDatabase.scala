@@ -14,8 +14,7 @@ class GameTheoryDatabase(val keyspace: KeySpaceDef) extends DatabaseImpl(keyspac
 
   object games extends ConcreteGames with keyspace.Connector
 
-  //   TODO: add denormalised table
-  //  object userGames extends ConcreteUserGames with keyspace.Connector
+  object userGames extends ConcreteUserGames with keyspace.Connector
 }
 
 object GameTheoryDatabase extends GameTheoryDatabase(CassandraDefaults.connector)
