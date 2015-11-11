@@ -1,23 +1,27 @@
 package uk.co.tscala.gametheory.db.denorm.usergames
 
 import com.websudos.phantom.CassandraTable
-import com.websudos.phantom.dsl.{IntColumn, Row, StringColumn, DoubleColumn}
+import com.websudos.phantom.dsl._
 import com.websudos.phantom.keys.PartitionKey
-import uk.co.tscala.gametheory.domain.{Game, User}
+import uk.co.tscala.gametheory.domain.{Game, User, UserGame}
 
 
 class UserGames extends CassandraTable[ConcreteUserGames, UserGame] {
 
   object gameId extends IntColumn(this) with PartitionKey[Int]
+
   object name extends StringColumn(this)
+
   object rating extends DoubleColumn(this)
+
   object averageRating extends DoubleColumn(this)
-  object userName extends StringColumn(this) with PartitionKey[String]
+
+  object username extends StringColumn(this) with PrimaryKey[String]
 
   def fromRow(row: Row): UserGame = {
     UserGame(
       User(
-        name(row)
+        username(row)
       ),
       Game(
         gameId(row),

@@ -4,6 +4,7 @@ import com.websudos.phantom.connectors.KeySpaceDef
 import com.websudos.phantom.db.DatabaseImpl
 import uk.co.tscala.gametheory.db.games.ConcreteGames
 import uk.co.tscala.gametheory.db.users.ConcreteUsers
+import uk.co.tscala.gametheory.db.denorm.usergames.ConcreteUserGames
 
 /**
   * Created by tom on 06/11/15.

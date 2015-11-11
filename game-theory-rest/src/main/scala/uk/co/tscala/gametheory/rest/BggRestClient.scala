@@ -6,7 +6,7 @@ import com.websudos.phantom.dsl._
 import spray.client.pipelining._
 import spray.json._
 import uk.co.tscala.gametheory.db.cassandra.{CassandraDefaults, GameTheoryDatabase}
-import uk.co.tscala.gametheory.domain.{Game, User}
+import uk.co.tscala.gametheory.domain.{UserGame, Game, User}
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -36,10 +36,10 @@ object BggRestClient extends App with CassandraDefaults.connector.Connector {
       val members = (xml \\ "members" \\ "member" \\ "@name").map(_.text)
 
       Await.result(GameTheoryDatabase.autocreate.future(), 5.seconds)
-      Await.ready(GameTheoryDatabase.users.create.ifNotExists().future(), 5.seconds)
 
-      Await.result(GameTheoryDatabase.autocreate.future(), 5.seconds)
+      Await.ready(GameTheoryDatabase.users.create.ifNotExists().future(), 5.seconds)
       Await.ready(GameTheoryDatabase.games.create.ifNotExists().future(), 5.seconds)
+      Await.ready(GameTheoryDatabase.userGames.create.ifNotExists().future(), 5.seconds)
 
       members.foreach { name =>
         // update db?
@@ -58,6 +58,11 @@ object BggRestClient extends App with CassandraDefaults.connector.Connector {
               GameTheoryDatabase.games.store(game).onComplete(res =>
                 println("Stored: " + game.name + " (" + res + ")")
               )
+
+              GameTheoryDatabase.userGames.store(UserGame(User(name), game)).onComplete(res =>
+                println("Stored: " + game.name + ", " + name +  " (" + res + ")")
+              )
+
             }
           case Failure(error) =>
             println("Failed to get collection for " + name)

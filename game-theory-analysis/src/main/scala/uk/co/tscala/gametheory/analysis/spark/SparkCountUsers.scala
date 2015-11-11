@@ -23,23 +23,23 @@ class SimpleUserGameOperations {
 
       val userGames = spark.cassandraTable("bgg_scala", "usergames")
       
-      // Most popular (by count)
-      userGames.map(e => (e.gameId,1))
-               .reduceByKey(_.2 + _.2)
-               .map(e => e.swap)
-               .sortByKey(1, 1) // Issue with repeated keys?
-               .take(10)
-               .foreach{
-        	     println _.1 + ": " + _.2
-		       }
-	
-	// Most popular, by rating (counting the ratings in this table)
-	userGames.filter(e => e.rating > 0)
-			 .map(e => (e.gameId, e.rating))
-			 .combineByKey(v => (v,1), x, v => (x(0) + v, x(1) + 1), x, y => (x(0)+y(0),x(1)+y(1)))
-			 .map(l,(s,c) => (l , s/c)
-			 .collectAsMap()
-			 .foreach{ println }
+//      // Most popular (by count)
+//      userGames.map(e => (e.gameId,1))
+//               .reduceByKey(_.2 + _.2)
+//               .map(e => e.swap)
+//               .sortByKey(1, 1) // Issue with repeated keys?
+//               .take(10)
+//               .foreach{
+//        	     println _.1 + ": " + _.2
+//		       }
+//
+//	// Most popular, by rating (counting the ratings in this table)
+//	userGames.filter(e => e.rating > 0)
+//			 .map(e => (e.gameId, e.rating))
+//			 .combineByKey(v => (v,1), x, v => (x(0) + v, x(1) + 1), x, y => (x(0)+y(0),x(1)+y(1)))
+//			 .map(l,(s,c) => (l , s/c)
+//			 .collectAsMap()
+//			 .foreach{ println }
 			 
 	// Largest differences from BGG average rating?
 	
