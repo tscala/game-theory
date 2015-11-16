@@ -35,7 +35,7 @@ object BggRestClient extends App with CassandraDefaults.connector.Connector {
     case Success(xml) =>
       val members = (xml \\ "members" \\ "member" \\ "@name").map(_.text)
 
-      Await.result(GameTheoryDatabase.autocreate.future(), 5.seconds)
+      Await.result(GameTheoryDatabase.autocreate.future(), 10.seconds)
 
       Await.ready(GameTheoryDatabase.users.create.ifNotExists().future(), 5.seconds)
       Await.ready(GameTheoryDatabase.games.create.ifNotExists().future(), 5.seconds)
