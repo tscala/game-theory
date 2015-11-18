@@ -24,14 +24,13 @@ class SimpleUserGameOperations {
       val userGames = spark.cassandraTable("bgg_scala", "usergames")
       
 //      // Most popular (by count)
-//      userGames.map(e => (e.gameId,1))
-//               .reduceByKey(_.2 + _.2)
-//               .map(e => e.swap)
-//               .sortByKey(1, 1) // Issue with repeated keys?
-//               .take(10)
-//               .foreach{
-//        	     println _.1 + ": " + _.2
-//		       }
+      userGames.map(e => (e.getString("name"), 1))
+               .reduceByKey((a, b) => a + b)
+               .map(e => e.swap)
+               .sortByKey(false, 1)
+               .map(e => e.swap)
+               .take(10)
+               .foreach{ println }
 //
 //	// Most popular, by rating (counting the ratings in this table)
 //	userGames.filter(e => e.rating > 0)
