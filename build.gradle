@@ -18,7 +18,7 @@ allprojects {
     dependencies {
         compile 'org.scala-lang:scala-compiler:2.11.7'
         compile 'org.scala-lang:scala-library:2.11.7'
-        test 'org.scalatest:scalatest_2.11:2.2.5'
+        testCompile 'org.scalatest:scalatest_2.11:2.2.5'
     }
 }
 
