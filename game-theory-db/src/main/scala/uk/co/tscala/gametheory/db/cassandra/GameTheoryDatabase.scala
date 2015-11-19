@@ -7,9 +7,12 @@ import uk.co.tscala.gametheory.db.users.ConcreteUsers
 import uk.co.tscala.gametheory.db.denorm.usergames.ConcreteUserGames
 
 /**
-  * Created by tom on 06/11/15.
+  * Implementation of the database objects for the game-theory project.
+  *
+  * @author tscala
+  * @since 06/11/15
   */
-class GameTheoryDatabase(val keyspace: KeySpaceDef) extends DatabaseImpl(keyspace) {
+sealed class GameTheoryDatabase(val keyspace: KeySpaceDef) extends DatabaseImpl(keyspace) {
 
   object users extends ConcreteUsers with keyspace.Connector
 
@@ -18,4 +21,7 @@ class GameTheoryDatabase(val keyspace: KeySpaceDef) extends DatabaseImpl(keyspac
   object userGames extends ConcreteUserGames with keyspace.Connector
 }
 
+/**
+  * Database singleton object.
+  */
 object GameTheoryDatabase extends GameTheoryDatabase(CassandraDefaults.connector)

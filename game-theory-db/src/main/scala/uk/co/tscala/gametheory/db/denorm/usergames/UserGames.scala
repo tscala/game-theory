@@ -5,8 +5,10 @@ import com.websudos.phantom.dsl._
 import com.websudos.phantom.keys.PartitionKey
 import uk.co.tscala.gametheory.domain.{Game, User, UserGame}
 
-
-class UserGames extends CassandraTable[ConcreteUserGames, UserGame] {
+/**
+  *
+  */
+abstract class UserGames extends CassandraTable[ConcreteUserGames, UserGame] {
 
   object gameId extends IntColumn(this) with PartitionKey[Int]
 
@@ -18,6 +20,12 @@ class UserGames extends CassandraTable[ConcreteUserGames, UserGame] {
 
   object username extends StringColumn(this) with PrimaryKey[String]
 
+  /**
+    * Create a {@link UserGame} object from a {@link Row} in the UserGames table.
+    *
+    * @param row the row object
+    * @return a new UserGame object
+    */
   def fromRow(row: Row): UserGame = {
     UserGame(
       User(

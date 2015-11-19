@@ -6,7 +6,7 @@ import com.websudos.phantom.keys.PartitionKey
 import uk.co.tscala.gametheory.domain.Game
 
 
-class Games extends CassandraTable[ConcreteGames, Game] {
+abstract class Games extends CassandraTable[ConcreteGames, Game] {
 
   object gameId extends IntColumn(this) with PartitionKey[Int]
   object name extends StringColumn(this)

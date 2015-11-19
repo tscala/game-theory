@@ -7,10 +7,12 @@ import uk.co.tscala.gametheory.domain.Game
 import scala.concurrent.Future
 
 /**
-  * Created by tom on 06/11/15.
+  * Games database object.
+  *
+  * @author tscala
+  * @since 06/11/15
   */
-// The root connector comes from import com.websudos.phantom.dsl._
-abstract class ConcreteGames extends Games with RootConnector {
+class ConcreteGames extends Games with RootConnector {
 
   def store(game: Game): Future[ResultSet] = {
     insert.value(_.gameId, game.gameId)
