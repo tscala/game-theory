@@ -17,7 +17,6 @@ abstract class ConcreteUserGames extends UserGames with RootConnector {
   def store(userGame: UserGame): Future[ResultSet] = {
     insert.value(_.gameId, userGame.game.gameId)
       .value(_.username, userGame.user.name)
-      .value(_.rating, userGame.game.rating)
       .value(_.name, userGame.game.name)
       .value(_.averageRating, userGame.game.averageRating)
       .future()

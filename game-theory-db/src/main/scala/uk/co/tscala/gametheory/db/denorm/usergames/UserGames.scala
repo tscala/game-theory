@@ -34,7 +34,6 @@ abstract class UserGames extends CassandraTable[ConcreteUserGames, UserGame] {
       Game(
         gameId(row),
         name(row),
-        rating(row),
         averageRating(row)
       )
     )

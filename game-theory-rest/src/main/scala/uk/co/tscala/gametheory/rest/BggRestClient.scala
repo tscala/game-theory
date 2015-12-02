@@ -18,14 +18,18 @@ object BggRestClient extends App with CassandraDefaults.connector.Connector {
   implicit val system = ActorSystem("bgg-rest")
   val log = Logging(system, getClass)
 
-  val collectionPipeline = sendReceive ~> unmarshal[String]
-  val guildPipeline = sendReceive ~> unmarshal[NodeSeq]
+  val jsonPipeline = sendReceive ~> unmarshal[String]
+  val xmlPipeline = sendReceive ~> unmarshal[NodeSeq]
 
-  def getCollection(name: String): Future[String] = collectionPipeline {
+  def getCollection(name: String): Future[String] = jsonPipeline {
     Get("http://bgg-json.azurewebsites.net/collection/" + name.replaceAll(" ", "%20"))
   }
 
-  val guildResponseFuture = guildPipeline {
+  def getGame(thingId: Int): Future[String] = jsonPipeline {
+    Get("http://bgg-json.azurewebsites.net/thing/" + thingId)
+  }
+
+  val guildResponseFuture = xmlPipeline {
     Get("http://www.boardgamegeek.com/xmlapi2/guild?id=410&members=1")
   }
 
@@ -35,7 +39,7 @@ object BggRestClient extends App with CassandraDefaults.connector.Connector {
     case Success(xml) =>
       val members = (xml \\ "members" \\ "member" \\ "@name").map(_.text)
 
-      Await.result(GameTheoryDatabase.autocreate.future(), 10.seconds)
+      Await.result(GameTheoryDatabase.autocreate.future(), 5.seconds)
 
       Await.ready(GameTheoryDatabase.users.create.ifNotExists().future(), 5.seconds)
       Await.ready(GameTheoryDatabase.games.create.ifNotExists().future(), 5.seconds)
@@ -45,7 +49,7 @@ object BggRestClient extends App with CassandraDefaults.connector.Connector {
         // update db?
 
         GameTheoryDatabase.users.store(User(name)).onComplete(res =>
-          println("Stored: " + res)
+          println("Stored user: " + res)
         )
 
         getCollection(name) onComplete {
@@ -56,14 +60,31 @@ object BggRestClient extends App with CassandraDefaults.connector.Connector {
             games.foreach { game =>
 
               GameTheoryDatabase.games.store(game).onComplete(res =>
-                println("Stored: " + game.name + " (" + res + ")")
+                println("Stored game: " + res)
               )
 
               GameTheoryDatabase.userGames.store(UserGame(User(name), game)).onComplete(res =>
-                println("Stored: " + game.name + ", " + name +  " (" + res + ")")
+                println("Stored userGame: " + res)
               )
-
             }
+
+            (1000 to 9000).foreach(i => getGame(i) onComplete {
+              case Success(json) =>
+
+                // Something like this....
+               val owned =  json.parseJson.asJsObject.fields.getOrElse("owned", false)
+
+                // only add the entry to the DB if it is owned...
+                if (owned) {
+                  println "Owned"
+                }
+
+                val game = json.parseJson.convertTo[Game]
+
+                GameTheoryDatabase.games.store(game).onComplete(res =>
+                  println("Stored game: " + res)
+                )
+            })
           case Failure(error) =>
             println("Failed to get collection for " + name)
         }
@@ -72,30 +93,4 @@ object BggRestClient extends App with CassandraDefaults.connector.Connector {
     case Failure(error) =>
       println("Failed to get guild information")
   }
-
-  //  guildResponseFuture onComplete {
-  //    case Success(xml) =>
-  //      val members = (xml \\ "members" \\ "member" \\ "@name").map(_.text)
-  //
-  //      members.foreach{ name => getCollection(name) onComplete {
-  //        case Success(json) =>
-  //          val games = json.parseJson.convertTo[List[Game]]
-  //
-  //          games.foreach { game =>
-  //            val count = gameMap.getOrElse(game, 0)
-  //            gameMap.put(game, count + 1)
-  //          }
-  //        case Failure(error) =>
-  //          println("Failed to get collection for " + name)
-  //      }
-  //      }
-  //
-  //    case Failure(error) =>
-  //      println("Failed to get guild information")
-  //  }
-  //  Thread.sleep(60000)
-  //
-  //  gameMap.foreach{ e =>
-  //    println(e._1.name + " occurs " + e._2 + " times.")
-  //  }
 }

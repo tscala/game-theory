@@ -12,12 +12,11 @@ import scala.concurrent.Future
   * @author tscala
   * @since 06/11/15
   */
-class ConcreteGames extends Games with RootConnector {
+abstract class ConcreteGames extends Games with RootConnector {
 
   def store(game: Game): Future[ResultSet] = {
     insert.value(_.gameId, game.gameId)
       .value(_.name, game.name)
-      .value(_.rating, game.rating)
       .value(_.averageRating, game.averageRating)
       .future()
   }

@@ -9,7 +9,7 @@ import org.scalatest._
 class GameTest extends UnitSpec {
 
   "A game" should "contain an ID field" in {
-    val game = new Game(0, "", 0.0, 0.0)
+    val game = new Game(0, "", 0.0)
     assert(game.gameId !== null)
   }
 }
